@@ -1,30 +1,29 @@
 using Kaizen.Core;
 using Microsoft.EntityFrameworkCore;
 
-namespace Kaizen.MainWeb
+namespace Kaizen.MainWeb;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+        var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
+        builder.Services.AddControllers();
 
-            var connectionString = builder.Configuration.GetConnectionString("Default");
-            builder.Services.AddDbContext<KaizenDbContext>(opt => opt.UseSqlServer(connectionString));
+        var connectionString = builder.Configuration.GetConnectionString("Default");
+        builder.Services.AddDbContext<KaizenDbContext>(opt => opt.UseSqlServer(connectionString));
 
-            var app = builder.Build();
+        var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            Database.Migrate(app);
+        // Configure the HTTP request pipeline.
+        Database.Migrate(app);
 
-            app.UseAuthorization();
+        app.UseAuthorization();
 
 
-            app.MapControllers();
+        app.MapControllers();
 
-            app.Run();
-        }
+        app.Run();
     }
 }

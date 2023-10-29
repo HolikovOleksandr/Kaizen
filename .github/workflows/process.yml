@@ -1,0 +1,29 @@
+name: Build and Deploy on digital ocean
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build_main_web:
+    name: Build Main Web [.net]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cheackout
+        uses: actions/cheackout@v2
+
+      - name: Log in Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: lesholikov
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      
+      - name: Build Docker
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: lesholikov/kaizen_main_web

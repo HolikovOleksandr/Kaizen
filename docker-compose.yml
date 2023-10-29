@@ -1,0 +1,45 @@
+version: '3'
+services:
+
+  sql:
+    container_name: sql
+    image: mcr.microsoft.com/mssql/server
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: yourStrong(!)Password
+    networks:
+      - 'kaizen'
+    volumes:
+      - "mssqlsystem:/var/opt/mssql"
+      - "mssqluser:/var/opt/sqlserver"
+    restart: always
+
+  main_web:
+    container_name: main_web
+    image: lesholikov/kaizen_main_web
+    ports:
+      - "8000:80"
+    networks:
+      - 'kaizen'
+    restart: always
+
+  frontend_ng:
+    container_name: frontend_ng
+    image: lesholikov/kaizen_ng
+    ports:
+      - "80:80"
+    networks:
+      - 'kaizen'
+    restart: always
+    
+networks:
+  kaizen:
+    driver: bridge
+
+volumes:
+  mssqlsystem:
+    external: true
+  mssqluser:
+    external: true
